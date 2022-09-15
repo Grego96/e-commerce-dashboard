@@ -25,7 +25,7 @@ function Products() {
     async function getProducts() {
       const response = await axios({
         method: "get",
-        baseURL: `http://localhost:8000/products`,
+        baseURL: `${process.env.REACT_APP_API_BASE}/products`,
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
