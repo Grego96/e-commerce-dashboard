@@ -9,11 +9,11 @@ function Categories() {
 
   const [modalType, setModalType] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalElementId, setModalElementId] = useState(null);
+  const [modalElement, setModalElement] = useState(null);
 
-  function openModal(type, elementId) {
+  function openModal(type, element) {
     setModalType(type);
-    setModalElementId(elementId);
+    setModalElement(element);
     setModalIsOpen(true);
   }
   function closeModal() {
@@ -71,7 +71,7 @@ function Categories() {
                       <div className="d-flex justify-content-around action-buttons">
                         <button
                           className="btn btn-light"
-                          onClick={() => openModal("Update", u.id)}
+                          onClick={() => openModal("Update", u)}
                         >
                           <svg
                             className="fill-grey"
@@ -85,7 +85,7 @@ function Categories() {
                         </button>
                         <button
                           className="btn btn-danger"
-                          onClick={() => openModal("delete", u.id)}
+                          onClick={() => openModal("delete", u)}
                         >
                           <svg
                             className="fill-red"
@@ -109,7 +109,7 @@ function Categories() {
       <Modal
         type={modalType}
         element={"category"}
-        elementId={modalElementId}
+        elementObject={modalElement}
         isOpen={modalIsOpen}
         closeModal={closeModal}
       />

@@ -67,7 +67,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
     try {
       const response = await axios({
         method: "post",
-        baseURL: `${process.env.REACT_APP_API_BASE}${endpoint}`,
+        baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}`,
         data: data,
         headers: {
           Authorization:
@@ -91,9 +91,10 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
         },
       });
+      console.log(response);
       setResponseMessage(response.data.message);
     } catch (error) {
-      setResponseMessage(error.response.data.message);
+      // setResponseMessage(error.response.data.message);
     }
   }
 
@@ -123,7 +124,6 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     type === "Create" ? createItem(data) : updateItem(data);
-    console.log(data);
   };
 
   return (
@@ -492,16 +492,34 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
             <>
               <h3>{type} category</h3>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div class="form-floating mb-3">
-                  <input
-                    {...register("name", { required: true })}
-                    type="text"
-                    className="form-control"
-                    id="categoryName"
-                    placeholder="placeholder"
-                  />
-                  <label htmlFor="categoryName">Name</label>
-                </div>
+                {elementObject ? (
+                  <>
+                    <div class="customFloat mb-3">
+                      <input
+                        {...register("name", { required: true })}
+                        type="text"
+                        className="form-control"
+                        id="categoryName"
+                        placeholder={elementObject.name}
+                      />
+                      <label htmlFor="categoryName">Name</label>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div class="form-floating mb-3">
+                      <input
+                        {...register("name", { required: true })}
+                        type="text"
+                        className="form-control"
+                        id="categoryName"
+                        placeholder="placeholder"
+                      />
+                      <label htmlFor="categoryName">Name</label>
+                    </div>
+                  </>
+                )}
+
                 <div className="pt-2 d-flex justify-content-between align-items-center">
                   <div className="d-inline-block">
                     <button type="submit" className={"btn btn-main me-2"}>
