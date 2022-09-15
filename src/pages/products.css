@@ -1,0 +1,5 @@
+img {
+  height: 100px;
+  object-fit: contain;
+  fill: rgb(214, 214, 55);
+}

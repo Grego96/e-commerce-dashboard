@@ -5,7 +5,89 @@
 }
 
 :root {
-    --main-bg-color: rgb(255, 195, 116);
-    --seg-bg-color: rgb(255, 166, 0);
-  }
-  
+  --main-bg-color: rgb(255, 195, 116);
+  --seg-bg-color: rgb(255, 166, 0);
+}
+
+table {
+  border: 1px solid grey;
+}
+
+svg {
+  width: 1.5em;
+}
+
+h1 {
+  margin-bottom: 0.2em !important;
+  position: relative;
+}
+
+h1::before {
+  content: "";
+  width: 100%;
+  background-color: var(--seg-bg-color);
+  height: 2.3px;
+  z-index: -1;
+  position: absolute;
+  bottom: 0.2rem;
+}
+
+.btn-success {
+  background-color: white !important;
+  color: green !important;
+}
+
+.btn-success:hover {
+  background-color: rgba(42, 255, 42, 0.966) !important;
+  color: white !important;
+}
+
+.fill-red {
+  fill: red;
+  transition: 0.15s;
+}
+
+.fill-grey {
+  fill: black;
+  transition: 0.15s;
+}
+
+.btn-light {
+  background-color: white !important;
+  border: 1px solid black !important;
+  transition: 0.15s;
+}
+
+.btn-main {
+  background-color: var(--seg-bg-color) !important;
+  border: 1px solid var(--main-bg-color) !important;
+  transition: 0.15s;
+}
+
+.btn-main:hover {
+  background-color: var(--main-bg-color) !important;
+  border: 1px solid var(--main-bg-color) !important;
+  transition: 0.15s;
+}
+
+.btn-light:hover {
+  background-color: var(--seg-bg-color) !important;
+  border: 1px solid var(--main-bg-color) !important;
+}
+
+.btn-light:hover .fill-grey {
+  fill: white;
+}
+
+.btn-danger {
+  background-color: white !important;
+  transition: 0.15s;
+}
+
+.btn-danger:hover {
+  background-color: rgba(255, 0, 0, 0.863) !important;
+}
+
+.btn-danger:hover .fill-red {
+  fill: rgb(253, 253, 253);
+}

@@ -1,0 +1,15 @@
+.emptyRows {
+  background-color: rgba(219, 219, 219, 0.479) !important;
+}
+
+.admin {
+  background-color: rgba(131, 226, 131, 0.267) !important;
+  color: rgb(106, 155, 33);
+  border-radius: 180px;
+}
+
+.buyer {
+  background-color: rgba(226, 131, 131, 0.267) !important;
+  color: rgb(155, 33, 33);
+  border-radius: 180px;
+}

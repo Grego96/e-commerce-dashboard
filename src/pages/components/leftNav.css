@@ -1,0 +1,70 @@
+.leftNav {
+  padding: 1.5em;
+  background-color: black;
+  color: white;
+}
+
+.navItems {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.leftNav svg {
+  fill: grey;
+  transition: 0.3s;
+  width: 1em;
+}
+
+.navTitle {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.navTitle h2 {
+  font-size: 1.5rem;
+}
+
+.listElements ul {
+  margin: 0;
+  padding: 0;
+}
+
+.listElements ul li {
+  list-style: none;
+  padding: 10px 15px;
+  font-size: 1.3rem;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.list-active {
+  background-color: var(--main-bg-color);
+}
+
+.listElements ul li svg {
+  margin-right: 10px;
+}
+
+.listElements ul li:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--main-bg-color);
+}
+
+.listElements ul li:hover svg {
+  fill: white;
+}
+
+.section {
+  border-bottom: 1px solid rgb(255, 255, 255);
+  /* margin-top: 1em; */
+  font-weight: 500;
+}
+
+.second-section {
+  margin-top: 2em;
+}
