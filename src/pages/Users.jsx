@@ -23,7 +23,7 @@ function Users() {
     async function getUsers() {
       const response = await axios({
         method: "get",
-        baseURL: `http://localhost:8000/users`,
+        baseURL: `${process.env.REACT_APP_API_BASE}/users`,
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",

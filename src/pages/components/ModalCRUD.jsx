@@ -28,7 +28,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
     async function getCategories() {
       const response = await axios({
         method: "get",
-        baseURL: `http://localhost:8000/categories`,
+        baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
@@ -67,7 +67,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
     try {
       const response = await axios({
         method: "post",
-        baseURL: `http://localhost:8000/${endpoint}`,
+        baseURL: `${process.env.REACT_APP_API_BASE}${endpoint}`,
         data: data,
         headers: {
           Authorization:
@@ -84,7 +84,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
     try {
       const response = await axios({
         method: "patch",
-        baseURL: `http://localhost:8000/${endpoint}/${elementObject.id}`,
+        baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementObject.id}`,
         data: data,
         headers: {
           Authorization:
@@ -100,7 +100,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
   async function deleteItem() {
     await axios({
       method: "delete",
-      baseURL: `http://localhost:8000/${endpoint}/${elementObject.id}`,
+      baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementObject.id}`,
       headers: {
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
