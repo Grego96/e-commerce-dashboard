@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 function LeftNav() {
   return (
-    <div className="leftNav h-100">
-      <h1>RADBIKES</h1>
+    <div className="leftNav ">
+      <h1 className="navHeader">RADPOWERBIKES</h1>
       <div className="listElements navItems">
         <div className="section">
           <h2>Overview</h2>

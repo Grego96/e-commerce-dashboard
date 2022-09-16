@@ -3,3 +3,8 @@
 * {
   font-family: "Roboto";
 }
+
+:root {
+  --main-bg-color: rgb(255, 195, 116);
+  --seg-bg-color: rgb(255, 166, 0);
+}

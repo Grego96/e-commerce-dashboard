@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import "./prueba.css";
 
-function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
+function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
   const [responseMessage, setResponseMessage] = useState(null);
   const [elementUpdating, setElementUpdating] = useState(null);
 
@@ -42,27 +42,6 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (type === "Update") {
-  //     async function getElementUpdating() {
-  //       const response = await axios({
-  //         method: "get",
-  //         baseURL: `http://localhost:8000/${endpoint}/${elementObject.id}`,
-  //         headers: {
-  //           Authorization:
-  //             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
-  //         },
-  //       });
-  //       console.log(response);
-  //       if (response) {
-  //         setElementUpdating(response.data[0]);
-  //       }
-  //     }
-  //     getElementUpdating();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [elementObject.id]);
-
   async function createItem(data) {
     try {
       const response = await axios({
@@ -81,11 +60,15 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
   }
 
   async function updateItem(data) {
+    let d = Object.fromEntries(
+      Object.entries(data).filter(([a, v]) => v !== "")
+    );
+
     try {
       const response = await axios({
         method: "patch",
-        baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementObject.id}`,
-        data: data,
+        baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
+        data: d,
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
@@ -101,7 +84,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
   async function deleteItem() {
     await axios({
       method: "delete",
-      baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementObject.id}`,
+      baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
       headers: {
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
@@ -139,7 +122,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
           <p> Are you sure you want to delete this item?</p>
           <button
             type="submit"
-            className={"btn btn-main me-2"}
+            className={"btn btn-main btn-long me-2"}
             onClick={() => {
               deleteItem();
               closeModal();
@@ -147,7 +130,10 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
           >
             Delete
           </button>
-          <button className={"btn btn-dark "} onClick={() => closeModal()}>
+          <button
+            className={"btn btn-long btn-dark "}
+            onClick={() => closeModal()}
+          >
             Cancel
           </button>
         </>
@@ -155,95 +141,66 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
         <>
           {element === "user" && (
             <>
-              <h3>{type} Admin</h3>
+              <h3 className="mb-3">{type} admin</h3>
               <form onSubmit={handleSubmit(onSubmit)}>
-                {elementObject ? (
-                  <>
-                    <div class="customFloat mb-3">
-                      <input
-                        {...register("firstname", { required: false })}
-                        type="text"
-                        className="form-control"
-                        id="firstName"
-                        placeholder={elementObject.first_name}
-                      />
-                      <label htmlFor="firstName">First Name</label>
-                    </div>
-                    <div className="customFloat mb-3">
-                      <input
-                        {...register("lastname", { required: false })}
-                        type="text"
-                        className="form-control"
-                        id="lastName"
-                        placeholder={elementObject.last_name}
-                      />
-                      <label htmlFor="lastName">Last Name</label>
-                    </div>
-                    <div className="customFloat mb-3">
-                      <input
-                        {...register("email", { required: false })}
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        placeholder={elementObject.email}
-                      />
-                      <label htmlFor="email">Email address</label>
-                    </div>
-                    <div className="form-floating">
-                      <input
-                        {...register("password", { required: false })}
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="password">Password</label>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="form-floating mb-3">
-                      <input
-                        {...register("firstname", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="lastName"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="lastName">First Name</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                      <input
-                        {...register("lastname", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="lastName"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="lastName">Last Name</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                      <input
-                        {...register("email", { required: true })}
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="email">Email address</label>
-                    </div>
-                    <div className="form-floating">
-                      <input
-                        {...register("password", { required: true })}
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="password">Password</label>
-                    </div>
-                  </>
-                )}
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
+                    {...register("firstname", { required: false })}
+                    type="text"
+                    className="form-control"
+                    id="firstName"
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.first_name : " "
+                    }`}
+                  />
+                  <label htmlFor="firstName">First Name</label>
+                </div>
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
+                    {...register("lastname", { required: false })}
+                    type="text"
+                    className="form-control"
+                    id="lastName"
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.last_name : " "
+                    }`}
+                  />
+                  <label htmlFor="lastName">Last Name</label>
+                </div>
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
+                    {...register("email", { required: false })}
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.email : " "
+                    }`}
+                  />
+                  <label htmlFor="email">Email address</label>
+                </div>
+                <div className="form-floating">
+                  <input
+                    {...register("password", { required: false })}
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    placeholder="placeholder"
+                  />
+                  <label htmlFor="password">Password</label>
+                </div>
 
                 <div className="pt-2 d-flex justify-content-between align-items-center">
                   <div className="d-inline-block">
@@ -251,7 +208,7 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
                       Create
                     </button>
                     <button
-                      className={"btn btn-dark "}
+                      className={"btn btn-long btn-dark "}
                       onClick={() => closeModal()}
                     >
                       Cancel
@@ -268,216 +225,160 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
                 <h3>{type} product</h3>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                {elementObject ? (
-                  <>
-                    {console.log(elementObject)}
-                    <div class="form-floating mb-3">
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
+                    {...register("images", {
+                      required: elementToUpdate ? false : true,
+                    })}
+                    type="text"
+                    className="form-control"
+                    id="productName"
+                    // placeholder={`${elementToUpdate ? elementToUpdate.image : " "}`}
+                  />
+                  <label htmlFor="productName">Image</label>
+                </div>
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
+                    {...register("name", {
+                      required: elementToUpdate ? false : true,
+                    })}
+                    type="text"
+                    className="form-control"
+                    id="productName"
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.name : " "
+                    }`}
+                  />
+                  <label htmlFor="productName">Name</label>
+                </div>
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <textarea
+                    {...register("description", {
+                      required: elementToUpdate ? false : true,
+                    })}
+                    className="form-control"
+                    id="floatingTextarea"
+                    rows={5}
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.description : " "
+                    }`}
+                    style={{ resize: "none", height: "100%" }}
+                  ></textarea>
+                  <label htmlFor="floatingTextarea">Description</label>
+                </div>
+                <div className="mb-3">
+                  <div className={`form-floating mb-3`}>
+                    <select
+                      {...register("categoryId", {
+                        required: elementToUpdate ? false : true,
+                      })}
+                      className="form-select"
+                      id="floatingSelectGrid"
+                      aria-label="Floating label select example"
+                      defaultValue={
+                        elementToUpdate ? elementToUpdate.category.id : ""
+                      }
+                    >
+                      <option disabled value="">
+                        Select a category
+                      </option>
+                      {categories && (
+                        <>
+                          {categories.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </>
+                      )}
+                    </select>
+                    <label htmlFor="floatingSelectGrid">Category</label>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-6 col-xl-2">
+                    <div
+                      className={`${
+                        elementToUpdate ? "customFloat" : "form-floating"
+                      } mb-3`}
+                    >
                       <input
-                        {...register("images", { required: true })}
-                        type="text"
+                        {...register("price", {
+                          required: elementToUpdate ? false : true,
+                        })}
+                        type="number"
                         className="form-control"
-                        id="productName"
-                        placeholder="placeholder"
+                        id="productStock"
+                        defaultValue={`${
+                          elementToUpdate ? elementToUpdate.price : ""
+                        }`}
+                        min={0}
                       />
-                      <label htmlFor="productName">Image</label>
+                      <label htmlFor="productStock">Price</label>
                     </div>
-                    <div class="customFloat mb-3">
+                  </div>
+                  <div className="col-6 col-xl-2">
+                    <div
+                      className={`${
+                        elementToUpdate ? "customFloat" : "form-floating"
+                      } mb-3`}
+                    >
                       <input
-                        {...register("name", { required: true })}
-                        type="text"
+                        {...register("stock", {
+                          required: elementToUpdate ? false : true,
+                        })}
+                        type="number"
                         className="form-control"
-                        id="productName"
-                        placeholder={elementObject.name}
+                        id="productStock"
+                        defaultValue={`${
+                          elementToUpdate ? elementToUpdate.stock : ""
+                        }`}
+                        min={0}
                       />
-                      <label htmlFor="productName">Name</label>
+                      <label htmlFor="productStock">Stock</label>
                     </div>
-                    <div class="customFloat mb-3">
-                      <textarea
-                        {...register("description", { required: true })}
-                        class="form-control"
-                        id="floatingTextarea"
-                        rows={5}
-                        placeholder={elementObject.description}
-                        style={{ resize: "none", height: "100%" }}
-                      ></textarea>
-                      <label for="floatingTextarea">Description</label>
-                    </div>
-                    <div className="mb-3">
-                      <div class="form-floating">
-                        <select
-                          {...register("category", { required: true })}
-                          class="form-select"
-                          id="floatingSelectGrid"
-                          aria-label="Floating label select example"
-                        >
-                          <option selected disabled value="">
-                            Select a category
-                          </option>
-                          {categories && (
-                            <>
-                              {categories.map((c) => (
-                                <option value={c.id}>{c.name}</option>
-                              ))}
-                            </>
-                          )}
-                        </select>
-                        <label for="floatingSelectGrid">Category</label>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-2">
-                        <div className=" form-floating mb-3">
-                          <input
-                            {...register("price", { required: true })}
-                            type="number"
-                            className="form-control"
-                            id="productStock"
-                            defaultValue={elementObject.price}
-                            min={0}
-                          />
-                          <label htmlFor="productStock">Price</label>
-                        </div>
-                      </div>
-                      <div className="col-2">
-                        <div className=" form-floating mb-3">
-                          <input
-                            {...register("stock", { required: true })}
-                            type="number"
-                            className="form-control"
-                            id="productStock"
-                            defaultValue={elementObject.stock}
-                            min={0}
-                          />
-                          <label htmlFor="productStock">Stock</label>
-                        </div>
-                      </div>
-                    </div>
+                  </div>
+                </div>
 
-                    <div className="form-floating mb-3">
-                      <div class="form-check">
-                        <input
-                          {...register("outstanding")}
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Outstanding
-                        </label>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div class="form-floating mb-3">
-                      <input
-                        {...register("images", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="productName"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="productName">Image</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input
-                        {...register("name", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="productName"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="productName"> Name</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <textarea
-                        {...register("description", { required: true })}
-                        class="form-control"
-                        placeholder="Leave a comment here"
-                        id="floatingTextarea"
-                        rows={5}
-                        style={{ resize: "none", height: "100%" }}
-                      ></textarea>
-                      <label for="floatingTextarea">Description</label>
-                    </div>
-                    <div className="mb-3">
-                      <div class="form-floating">
-                        <select
-                          {...register("category", { required: true })}
-                          class="form-select"
-                          id="floatingSelectGrid"
-                          aria-label="Floating label select example"
-                        >
-                          <option selected disabled value="">
-                            Select a category
-                          </option>
-                          {categories && (
-                            <>
-                              {categories.map((c) => (
-                                <option key={c.id} value={c.id}>
-                                  {c.name}
-                                </option>
-                              ))}
-                            </>
-                          )}
-                        </select>
-                        <label for="floatingSelectGrid">Category</label>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-2">
-                        <div className=" form-floating mb-3">
-                          <input
-                            {...register("price", { required: true })}
-                            type="number"
-                            className="form-control"
-                            id="productStock"
-                            placeholder="productStock"
-                            min={0}
-                          />
-                          <label htmlFor="productStock">Price</label>
-                        </div>
-                      </div>
-                      <div className="col-2">
-                        <div className=" form-floating mb-3">
-                          <input
-                            {...register("stock", { required: true })}
-                            type="number"
-                            className="form-control"
-                            id="productStock"
-                            placeholder="productStock"
-                            min={0}
-                          />
-                          <label htmlFor="productStock">Stock</label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-floating mb-3">
-                      <div class="form-check">
-                        <input
-                          {...register("outstanding")}
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckDefault"
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Outstanding
-                        </label>
-                      </div>
-                    </div>
-                  </>
-                )}
+                <div className={`mb-3`}>
+                  <div className="form-check">
+                    <input
+                      {...register("outstanding")}
+                      className="form-check-input"
+                      type="checkbox"
+                      defaultChecked={
+                        elementToUpdate ? elementToUpdate.outstanding : false
+                      }
+                      id="flexCheckDefault"
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Outstanding
+                    </label>
+                  </div>
+                </div>
 
                 <div className="pt-2 d-flex justify-content-between align-items-center">
                   <div className="d-inline-block">
                     <button type="submit" className={"btn btn-main me-2"}>
-                      Create
+                      {type}
                     </button>
                     <button
-                      className={"btn btn-dark "}
+                      className={"btn btn-long btn-dark "}
                       onClick={() => closeModal()}
                     >
                       Cancel
@@ -492,41 +393,35 @@ function ModalCRUD({ type, element, elementObject, isOpen, closeModal }) {
             <>
               <h3>{type} category</h3>
               <form onSubmit={handleSubmit(onSubmit)}>
-                {elementObject ? (
-                  <>
-                    <div class="customFloat mb-3">
-                      <input
-                        {...register("name", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="categoryName"
-                        placeholder={elementObject.name}
-                      />
-                      <label htmlFor="categoryName">Name</label>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div class="form-floating mb-3">
-                      <input
-                        {...register("name", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="categoryName"
-                        placeholder="placeholder"
-                      />
-                      <label htmlFor="categoryName">Name</label>
-                    </div>
-                  </>
-                )}
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
+                    {...register("name", {
+                      required: elementToUpdate ? false : true,
+                    })}
+                    type="text"
+                    className="form-control"
+                    id="categoryName"
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.name : " "
+                    }`}
+                  />
+                  <label htmlFor="categoryName">Name</label>
+                </div>
 
                 <div className="pt-2 d-flex justify-content-between align-items-center">
                   <div className="d-inline-block">
-                    <button type="submit" className={"btn btn-main me-2"}>
+                    <button
+                      type="submit"
+                      className={"btn btn-long btn-main me-2"}
+                    >
                       {type}
                     </button>
                     <button
-                      className={"btn btn-dark "}
+                      className={"btn btn-long btn-dark "}
                       onClick={() => closeModal()}
                     >
                       Cancel

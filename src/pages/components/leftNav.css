@@ -1,6 +1,6 @@
 .leftNav {
-  padding: 1.5em;
-  background-color: black;
+  padding-top: 1.5em;
+  /* background-color: black; */
   color: white;
 }
 
@@ -8,6 +8,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.navHeader {
+  font-size: 2.3rem !important;
 }
 
 a {
