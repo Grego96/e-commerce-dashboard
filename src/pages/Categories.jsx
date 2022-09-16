@@ -7,7 +7,7 @@ import { Navigate } from "react-router";
 
 function Categories() {
   const [categories, setCategories] = useState(null);
-  const isLogged = useSelector((state) => state.token.value) != "";
+  const isLogged = useSelector((state) => state.token.value) !== "";
 
   const [modalType, setModalType] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -22,23 +22,23 @@ function Categories() {
     setModalIsOpen(false);
   }
 
-  useEffect(() => {
-    async function getCategories() {
-      const response = await axios({
-        method: "get",
-        baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
-        },
-      });
-      if (response) {
-        setCategories(response.data);
-      }
+  async function getCategories() {
+    const response = await axios({
+      method: "get",
+      baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+      },
+    });
+    if (response) {
+      setCategories(response.data);
     }
+  }
+  useEffect(() => {
     getCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [categories]);
 
   return (
     <>

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 function Users() {
   const [users, setUsers] = useState(null);
-  const isLogged = useSelector((state) => state.token.value) != "";
+  const isLogged = useSelector((state) => state.token.value) !== "";
 
   const [modalType, setModalType] = useState(null);
   const [modalElement, setModalElement] = useState(null);
@@ -21,23 +21,23 @@ function Users() {
     setModalIsOpen(false);
   }
 
-  useEffect(() => {
-    async function getUsers() {
-      const response = await axios({
-        method: "get",
-        baseURL: `${process.env.REACT_APP_API_BASE}/users`,
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
-        },
-      });
-      if (response) {
-        setUsers(response.data);
-      }
+  async function getUsers() {
+    const response = await axios({
+      method: "get",
+      baseURL: `${process.env.REACT_APP_API_BASE}/users`,
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+      },
+    });
+    if (response) {
+      setUsers(response.data);
     }
+  }
+
+  useEffect(() => {
     getUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [users]);
 
   return (
     <>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 
 function Orders() {
-  const isLogged = useSelector((state) => state.token.value) != "";
+  const isLogged = useSelector((state) => state.token.value) !== "";
   const [orders, setOrders] = useState(null);
 
   useEffect(() => {
@@ -57,7 +57,6 @@ function Orders() {
                         <td>{o.payment_method}</td>
                         <td>
                           {o.product_json.map((p) => {
-                            console.log(p);
                             return (
                               <>
                                 {p.quantity}x {p.product.name} <br />

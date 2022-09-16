@@ -6,7 +6,6 @@ import "./prueba.css";
 
 function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
   const [responseMessage, setResponseMessage] = useState(null);
-  const [elementUpdating, setElementUpdating] = useState(null);
 
   const [categories, setCategories] = useState(null);
   let endpoint;
@@ -24,23 +23,21 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
       break;
   }
 
-  useEffect(() => {
-    async function getCategories() {
-      const response = await axios({
-        method: "get",
-        baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
-        },
-      });
-      if (response) {
-        setCategories(response.data);
-      }
+  async function getCategories() {
+    const response = await axios({
+      method: "get",
+      baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+      },
+    });
+    if (response) {
+      setCategories(response.data);
     }
-    getCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   async function createItem(data) {
     try {
@@ -74,10 +71,9 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
         },
       });
-      console.log(response);
       setResponseMessage(response.data.message);
     } catch (error) {
-      // setResponseMessage(error.response.data.message);
+      setResponseMessage(error.response.data.message);
     }
   }
 
@@ -104,7 +100,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
     },
   };
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
     type === "Create" ? createItem(data) : updateItem(data);
   };
@@ -113,6 +109,14 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
     <Modal
       isOpen={isOpen}
       onRequestClose={closeModal}
+      onAfterOpen={() => {
+        getCategories();
+        reset({
+          price: elementToUpdate ? elementToUpdate.price : "",
+          stock: elementToUpdate ? elementToUpdate.stock : "",
+          outstanding: elementToUpdate ? elementToUpdate.outstanding : false,
+        });
+      }}
       style={customStyles}
       contentLabel="Example Modal"
       ariaHideApp={false}
@@ -205,7 +209,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                 <div className="pt-2 d-flex justify-content-between align-items-center">
                   <div className="d-inline-block">
                     <button type="submit" className={"btn btn-main me-2"}>
-                      Create
+                      {type}
                     </button>
                     <button
                       className={"btn btn-long btn-dark "}
@@ -225,22 +229,6 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                 <h3>{type} product</h3>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div
-                  className={`${
-                    elementToUpdate ? "customFloat" : "form-floating"
-                  } mb-3`}
-                >
-                  <input
-                    {...register("images", {
-                      required: elementToUpdate ? false : true,
-                    })}
-                    type="text"
-                    className="form-control"
-                    id="productName"
-                    // placeholder={`${elementToUpdate ? elementToUpdate.image : " "}`}
-                  />
-                  <label htmlFor="productName">Image</label>
-                </div>
                 <div
                   className={`${
                     elementToUpdate ? "customFloat" : "form-floating"
@@ -320,10 +308,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                         })}
                         type="number"
                         className="form-control"
-                        id="productStock"
-                        defaultValue={`${
-                          elementToUpdate ? elementToUpdate.price : ""
-                        }`}
+                        id="productPrice"
                         min={0}
                       />
                       <label htmlFor="productStock">Price</label>
@@ -342,9 +327,6 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                         type="number"
                         className="form-control"
                         id="productStock"
-                        defaultValue={`${
-                          elementToUpdate ? elementToUpdate.stock : ""
-                        }`}
                         min={0}
                       />
                       <label htmlFor="productStock">Stock</label>
@@ -358,9 +340,6 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                       {...register("outstanding")}
                       className="form-check-input"
                       type="checkbox"
-                      defaultChecked={
-                        elementToUpdate ? elementToUpdate.outstanding : false
-                      }
                       id="flexCheckDefault"
                     />
                     <label

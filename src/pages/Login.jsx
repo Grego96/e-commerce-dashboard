@@ -9,7 +9,7 @@ import { Navigate } from "react-router";
 
 function Login() {
   const dispatch = useDispatch();
-  const isLogged = useSelector((state) => state.token.value) != "";
+  const isLogged = useSelector((state) => state.token.value) !== "";
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     login(data);
@@ -17,7 +17,6 @@ function Login() {
   const [loginMessage, setLoginMessage] = useState("");
 
   async function login(formData) {
-    console.log(formData);
     try {
       const response = await axios({
         method: "post",
@@ -27,18 +26,15 @@ function Login() {
         },
         data: formData,
       });
-      console.log(response);
       dispatch(storeToken(response.data.token));
       dispatch(storeUser(response.data.user));
     } catch (error) {
-      // console.log(error);
       setLoginMessage(error.response.data.message);
     }
   }
 
   return (
     <>
-      {console.log(isLogged)}
       {isLogged && <Navigate to="/dashboard" replace={true} />}
       <div className="d-flex flex-column justify-content-center align-items-center vh-100 vw-100">
         <h1 className="mb-3">RADPOWERBIKES</h1>

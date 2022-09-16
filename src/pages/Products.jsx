@@ -8,7 +8,7 @@ import { Navigate } from "react-router";
 
 function Products() {
   const [products, setProducts] = useState(null);
-  const isLogged = useSelector((state) => state.token.value) != "";
+  const isLogged = useSelector((state) => state.token.value) !== "";
 
   const [modalType, setModalType] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -24,23 +24,24 @@ function Products() {
     setModalIsOpen(false);
   }
 
-  useEffect(() => {
-    async function getProducts() {
-      const response = await axios({
-        method: "get",
-        baseURL: `${process.env.REACT_APP_API_BASE}/products`,
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
-        },
-      });
-      if (response) {
-        setProducts(response.data);
-      }
+  async function getProducts() {
+    const response = await axios({
+      method: "get",
+      baseURL: `${process.env.REACT_APP_API_BASE}/products`,
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+      },
+    });
+    if (response) {
+      setProducts(response.data);
     }
+  }
+
+  useEffect(() => {
     getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [products]);
 
   return (
     <>
