@@ -115,6 +115,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
           price: elementToUpdate ? elementToUpdate.price : "",
           stock: elementToUpdate ? elementToUpdate.stock : "",
           outstanding: elementToUpdate ? elementToUpdate.outstanding : false,
+          categoryId: elementToUpdate ? elementToUpdate.categoryId : "",
         });
       }}
       style={customStyles}
@@ -235,6 +236,24 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   } mb-3`}
                 >
                   <input
+                    {...register("images", {
+                      required: elementToUpdate ? false : true,
+                    })}
+                    type="text"
+                    className="form-control"
+                    id="productName"
+                    placeholder={`${
+                      elementToUpdate ? elementToUpdate.name : " "
+                    }`}
+                  />
+                  <label htmlFor="productName">Image</label>
+                </div>
+                <div
+                  className={`${
+                    elementToUpdate ? "customFloat" : "form-floating"
+                  } mb-3`}
+                >
+                  <input
                     {...register("name", {
                       required: elementToUpdate ? false : true,
                     })}
@@ -275,9 +294,6 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                       className="form-select"
                       id="floatingSelectGrid"
                       aria-label="Floating label select example"
-                      defaultValue={
-                        elementToUpdate ? elementToUpdate.category.id : ""
-                      }
                     >
                       <option disabled value="">
                         Select a category
