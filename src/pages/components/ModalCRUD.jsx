@@ -236,15 +236,11 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   } mb-3`}
                 >
                   <input
-                    {...register("images", {
-                      required: elementToUpdate ? false : true,
-                    })}
+                    {...register("images")}
                     type="text"
                     className="form-control"
                     id="productName"
-                    placeholder={`${
-                      elementToUpdate ? elementToUpdate.name : " "
-                    }`}
+                    disabled
                   />
                   <label htmlFor="productName">Image</label>
                 </div>
