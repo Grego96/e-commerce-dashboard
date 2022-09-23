@@ -49,6 +49,7 @@ function Login() {
                 className="form-control"
                 id="email"
                 placeholder="placeholder"
+                defaultValue={"Admin@Admin.com"}
               />
               <label htmlFor="email">Email</label>
             </div>
@@ -61,6 +62,7 @@ function Login() {
                 className="form-control"
                 id="password"
                 placeholder="placeholder"
+                defaultValue={"admin"}
               />
               <label htmlFor="password">Password</label>
             </div>
