@@ -160,6 +160,7 @@ function Products() {
             elementToUpdate={modalElement}
             isOpen={modalIsOpen}
             closeModal={closeModal}
+            getProducts={getProducts}
           />
         </Layout>
       )}
