@@ -1,3 +1,13 @@
 .dashboard img {
   height: 50px !important;
 }
+
+.dashboard-card:hover {
+  transition: 0.1s ease-in-out;
+}
+
+.dashboard-card:hover {
+  background-color: rgb(255, 180, 81);
+  cursor: pointer;
+  transform: scale(1.02);
+}

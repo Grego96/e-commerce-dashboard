@@ -3,25 +3,40 @@ import Layout from "./components/Layout";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
+import Modal from "./components/ModalCRUD";
 
 function Orders() {
   const isLogged = useSelector((state) => state.token.value) !== "";
   const token = useSelector((state) => state.token.value);
   const [orders, setOrders] = useState(null);
 
-  useEffect(() => {
-    async function getOrders() {
-      const response = await axios({
-        method: "get",
-        baseURL: `${process.env.REACT_APP_API_BASE}/orders`,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      if (response) {
-        setOrders(response.data);
-      }
+  const [modalType, setModalType] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalElement, setModalElement] = useState(null);
+
+  function openModal(type, element) {
+    setModalType(type);
+    setModalElement(element);
+    setModalIsOpen(true);
+  }
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
+
+  async function getOrders() {
+    const response = await axios({
+      method: "get",
+      baseURL: `${process.env.REACT_APP_API_BASE}/orders`,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (response) {
+      setOrders(response.data);
     }
+  }
+  useEffect(() => {
     getOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -45,6 +60,7 @@ function Orders() {
                   <th scope="col">Items</th>
                   <th scope="col">Status</th>
                   <th scope="col">Date</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -64,6 +80,23 @@ function Orders() {
                         </td>
                         <td>{o.status}</td>
                         <td>{o.createdAt}</td>
+                        <td width={"1%"}>
+                          <div className="d-flex justify-content-around action-buttons">
+                            <button
+                              className="btn "
+                              onClick={() => openModal("Update", o)}
+                            >
+                              <svg
+                                focusable="false"
+                                aria-hidden="true"
+                                viewBox="0 0 24 24"
+                                data-testid="BuildIcon"
+                              >
+                                <path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </>
@@ -77,6 +110,14 @@ function Orders() {
               </tbody>
             </table>
           </div>
+          <Modal
+            type={modalType}
+            element={"order"}
+            elementToUpdate={modalElement}
+            isOpen={modalIsOpen}
+            closeModal={closeModal}
+            getElements={getOrders}
+          />
         </Layout>
       )}
     </>
