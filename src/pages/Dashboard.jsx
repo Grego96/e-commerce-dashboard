@@ -134,7 +134,7 @@ function Dashboard() {
         <Navigate to="/" replace={true} />
       ) : (
         <Layout>
-          <div className="row g-4">
+          <div className="row dashboard g-4">
             <DashboardCard
               text={"Today Sale"}
               quantity={1234}
