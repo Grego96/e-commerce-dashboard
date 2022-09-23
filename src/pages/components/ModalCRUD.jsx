@@ -55,19 +55,21 @@ function ModalCRUD({
 
   async function createItem(data) {
     const formData = new FormData();
-    for (let i = 0; i < data.images.length; i++) {
-      formData.append(`image${i + 1}`, data.images[i]);
-    }
+    if (element === "product") {
+      for (let i = 0; i < data.images.length; i++) {
+        formData.append(`image${i + 1}`, data.images[i]);
+      }
 
-    for (const x of Object.entries(data)) {
-      formData.append(`${x[0]}`, x[1]);
+      for (const x of Object.entries(data)) {
+        formData.append(`${x[0]}`, x[1]);
+      }
     }
 
     try {
       await axios({
         method: "post",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}`,
-        data: formData,
+        data: element === "product" ? formData : data,
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -80,11 +82,29 @@ function ModalCRUD({
   }
 
   async function updateItem(data) {
+    console.log(data);
+    const formData = new FormData();
+    if (element === "product") {
+      if (data.images.length > 0) {
+        for (let i = 0; i < data.images.length; i++) {
+          formData.append(`image${i + 1}`, data.images[i]);
+        }
+      }
+
+      for (const x of Object.entries(data)) {
+        formData.append(`${x[0]}`, x[1]);
+      }
+
+      for (const x of Object.entries(data)) {
+        console.log(`${x[0]}`, x[1]);
+      }
+    }
     try {
+      // console.log(formData);
       await axios({
         method: "patch",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
-        data: data,
+        data: element === "product" ? formData : data,
         headers: {
           Authorization: "Bearer " + token,
         },
