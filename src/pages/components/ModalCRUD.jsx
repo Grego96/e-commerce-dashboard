@@ -15,15 +15,13 @@ function ModalCRUD({
 }) {
   const token = useSelector((state) => state.token.value);
   const [responseMessage, setResponseMessage] = useState(null);
-
   const dbState = useSelector((state) => state.db.value);
+  const [categories, setCategories] = useState(null);
 
   useEffect(() => {
     getElements();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbState]);
-
-  const [categories, setCategories] = useState(null);
   let endpoint;
   switch (element) {
     case "user":
@@ -34,6 +32,9 @@ function ModalCRUD({
       break;
     case "category":
       endpoint = `categories`;
+      break;
+    case "order":
+      endpoint = `orders`;
       break;
     default:
       break;
@@ -63,7 +64,7 @@ function ModalCRUD({
     }
 
     try {
-      const response = await axios({
+      await axios({
         method: "post",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}`,
         data: formData,
@@ -71,7 +72,6 @@ function ModalCRUD({
           Authorization: "Bearer " + token,
         },
       });
-      setResponseMessage(response.data.message);
       closeModal();
       getElements();
     } catch (error) {
@@ -81,7 +81,7 @@ function ModalCRUD({
 
   async function updateItem(data) {
     try {
-      const response = await axios({
+      await axios({
         method: "patch",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
         data: data,
@@ -89,7 +89,6 @@ function ModalCRUD({
           Authorization: "Bearer " + token,
         },
       });
-      setResponseMessage(response.data.message);
       closeModal();
       getElements();
     } catch (error) {
@@ -425,6 +424,50 @@ function ModalCRUD({
                     }`}
                   />
                   <label htmlFor="categoryName">Name</label>
+                </div>
+
+                <div className="d-flex justify-content-center align-items-center flex-wrap">
+                  <div className="d-inline-block">
+                    <button
+                      type="submit"
+                      className={"btn btn-long btn-main me-2"}
+                    >
+                      {type}
+                    </button>
+                    <button
+                      className={"btn btn-long btn-dark "}
+                      onClick={() => closeModal()}
+                    >
+                      Cancel
+                    </button>
+                    <p className="text-center m-0">{responseMessage}</p>
+                  </div>
+                </div>
+              </form>
+            </>
+          )}
+          {element === "order" && (
+            <>
+              {/* {getStatuses()} */}
+              <h3>{type} order</h3>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className={`form-floating mb-3`}>
+                  <select
+                    {...register("status")}
+                    className="form-select"
+                    id="floatingSelectGrid"
+                    aria-label="Floating label select example"
+                    defaultValue={""}
+                  >
+                    <option disabled value="">
+                      Select new status
+                    </option>
+                    <option value="Canceled">Canceled</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                  <label htmlFor="floatingSelectGrid">Status</label>
                 </div>
 
                 <div className="d-flex justify-content-center align-items-center flex-wrap">
