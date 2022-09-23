@@ -123,6 +123,7 @@ function Categories() {
             elementToUpdate={modalElement}
             isOpen={modalIsOpen}
             closeModal={closeModal}
+            getElements={getCategories}
           />
         </Layout>
       )}

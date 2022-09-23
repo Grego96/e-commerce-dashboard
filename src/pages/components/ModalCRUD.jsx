@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import "./ModalCRUD.css";
 
-function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal ,getProducts}) {
+function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal ,getElements}) {
   const token = useSelector((state) => state.token.value);
   const [responseMessage, setResponseMessage] = useState(null);
 
@@ -60,7 +60,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal ,getProd
       // setResponseMessage(response.data.message);
       console.log(response);
       closeModal();
-      getProducts()
+      getElements()
     } catch (error) {
       console.log(error);
       // setResponseMessage(error.response.data.message);
@@ -79,7 +79,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal ,getProd
       });
       setResponseMessage(response.data.message);
       closeModal();
-      getProducts()
+      getElements()
     } catch (error) {
       setResponseMessage(error.response.data.message);
     }
@@ -94,7 +94,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal ,getProd
       },
     });
     closeModal();
-    getProducts()
+    getElements()
   }
 
   const { register, handleSubmit, reset } = useForm();
