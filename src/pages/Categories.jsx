@@ -43,7 +43,6 @@ function Categories() {
 
   return (
     <>
-      {console.log(isLogged)}
       {!isLogged ? (
         <Navigate to="/" replace={true} />
       ) : (
