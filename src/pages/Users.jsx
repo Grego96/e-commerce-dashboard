@@ -156,6 +156,7 @@ function Users() {
               elementToUpdate={modalElement}
               isOpen={modalIsOpen}
               closeModal={closeModal}
+              getElements={getUsers}
             />
           </>
         </Layout>

@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tokenReducer from "./redux/tokenReducer";
 import userReducer from "./redux/userReducer";
+import dbReducer from "./redux/dbReducer";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import {
@@ -17,6 +18,7 @@ import {
 const rootReducer = combineReducers({
   token: tokenReducer,
   user: userReducer,
+  db: dbReducer
 });
 
 const persistConfig = { key: "root", storage };
