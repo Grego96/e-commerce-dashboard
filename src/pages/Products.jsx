@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 
 function Products() {
+  const token = useSelector((state) => state.token.value);
+
   const [products, setProducts] = useState(null);
   const isLogged = useSelector((state) => state.token.value) !== "";
 
@@ -29,8 +31,7 @@ function Products() {
       method: "get",
       baseURL: `${process.env.REACT_APP_API_BASE}/products`,
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+        Authorization: "Bearer " + token,
       },
     });
     if (response) {
@@ -41,7 +42,7 @@ function Products() {
   useEffect(() => {
     getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products]);
+  }, []);
 
   return (
     <>
@@ -51,15 +52,10 @@ function Products() {
         <Layout>
           <div className="table-responsive">
             <div className="d-flex justify-content-between align-items-center">
-              <h1>Products</h1>
-              <div>
-                <button
-                  className="btn ps-4 pe-4"
-                  onClick={() => openModal("Create")}
-                >
-                  +
-                </button>
-              </div>
+              <h2>Products</h2>
+              <span className="me-2 create" onClick={() => openModal("Create")}>
+                +
+              </span>
             </div>
             <table className="table table-hover">
               <thead>
@@ -77,7 +73,7 @@ function Products() {
                 </tr>
               </thead>
               <tbody>
-                {products && (
+                {products ? (
                   <>
                     {products.map((p) => (
                       <tr key={p.id} className="align-middle">
@@ -85,7 +81,7 @@ function Products() {
                           <div>
                             <img
                               preload="true"
-                              src={`../img/${p.images.image1}`}
+                              src={`${p.images.image1}`}
                               alt=""
                             />
                           </div>
@@ -148,6 +144,12 @@ function Products() {
                       </tr>
                     ))}
                   </>
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="text-center">
+                      Loading...
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>

@@ -8,6 +8,7 @@ import { Navigate } from "react-router";
 function Categories() {
   const [categories, setCategories] = useState(null);
   const isLogged = useSelector((state) => state.token.value) !== "";
+  const token = useSelector((state) => state.token.value);
 
   const [modalType, setModalType] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -27,8 +28,7 @@ function Categories() {
       method: "get",
       baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+        Authorization: "Bearer " + token,
       },
     });
     if (response) {
@@ -38,24 +38,25 @@ function Categories() {
   useEffect(() => {
     getCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categories]);
+  }, []);
 
   return (
     <>
+      {console.log(isLogged)}
       {!isLogged ? (
         <Navigate to="/" replace={true} />
       ) : (
         <Layout>
-          <div className="table-responsive">
+          <div className="table-responsive ">
             <div className="d-flex justify-content-between align-items-center">
-              <h1>Categories</h1>
+              <h2>Categories</h2>
               <div>
-                <button
-                  className="btn ps-4 pe-4"
+                <span
+                  className="me-2 create"
                   onClick={() => openModal("Create")}
                 >
                   +
-                </button>
+                </span>
               </div>
             </div>
             <table className="table table-hover">
@@ -67,7 +68,7 @@ function Categories() {
                 </tr>
               </thead>
               <tbody>
-                {categories && (
+                {categories ? (
                   <>
                     {categories.map((u) => (
                       <tr key={u.id}>
@@ -106,6 +107,12 @@ function Categories() {
                       </tr>
                     ))}
                   </>
+                ) : (
+                  <tr>
+                    <td colSpan={3} className="text-center">
+                      Loading...
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>

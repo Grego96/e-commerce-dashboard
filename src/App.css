@@ -1,41 +1,9 @@
-:root {
-  --main-bg-color: rgb(255, 195, 116);
-  --seg-bg-color: rgb(255, 166, 0);
-}
-
 table {
   border: 1px solid grey;
 }
 
 svg {
   width: 1.5em;
-}
-
-h1 {
-  margin-bottom: 0.2em !important;
-  position: relative;
-  font-weight: 300 !important;
-  /* font-size: calc(0.5rem + 1.5vw) !important; */
-}
-
-h2 {
-  font-weight: 100 !important;
-  font-size: calc(0.8rem + 0.9vw) !important;
-}
-/* 
-h1::before {
-  content: "";
-  width: 100%;
-  background-color: var(--seg-bg-color);
-  height: 2.3px;
-  z-index: -1;
-  position: absolute;
-  bottom: 0.2rem;
-} */
-
-li {
-  font-size: 1.3em !important;
-  font-weight: 00 !important;
 }
 
 .btn {
@@ -64,4 +32,14 @@ li {
 
 .mx-lg-none {
   display: none;
+}
+
+.create {
+  color: rgba(0, 0, 0, 0.466);
+  font-size: 2.3em;
+  cursor: pointer;
+}
+
+.create:hover {
+  color: black;
 }

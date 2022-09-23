@@ -1,10 +1,12 @@
 import Modal from "react-modal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
-import "./prueba.css";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import "./ModalCRUD.css";
 
 function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
+  const token = useSelector((state) => state.token.value);
   const [responseMessage, setResponseMessage] = useState(null);
 
   const [categories, setCategories] = useState(null);
@@ -28,8 +30,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
       method: "get",
       baseURL: `${process.env.REACT_APP_API_BASE}/categories`,
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+        Authorization: "Bearer " + token,
       },
     });
     if (response) {
@@ -37,41 +38,46 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
   async function createItem(data) {
+    const formData = new FormData();
+    for (let i = 0; i < data.images.length; i++) {
+      formData.append(`image${i + 1}`, data.images[i]);
+    }
+
+    for (const x of Object.entries(data)) {
+      formData.append(`${x[0]}`, x[1]);
+    }
+
     try {
       const response = await axios({
         method: "post",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}`,
-        data: data,
+        data: formData,
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+          Authorization: "Bearer " + token,
         },
       });
-      setResponseMessage(response.data.message);
+      // setResponseMessage(response.data.message);
+      console.log(response);
+      closeModal();
     } catch (error) {
-      setResponseMessage(error.response.data.message);
+      console.log(error);
+      // setResponseMessage(error.response.data.message);
     }
   }
 
   async function updateItem(data) {
-    let d = Object.fromEntries(
-      Object.entries(data).filter(([a, v]) => v !== "")
-    );
-
     try {
       const response = await axios({
         method: "patch",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
-        data: d,
+        data: data,
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+          Authorization: "Bearer " + token,
         },
       });
       setResponseMessage(response.data.message);
+      closeModal();
     } catch (error) {
       setResponseMessage(error.response.data.message);
     }
@@ -82,35 +88,33 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
       method: "delete",
       baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+        Authorization: "Bearer " + token,
       },
     });
+    closeModal();
   }
-
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      width: "50%",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-    },
-  };
 
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
-    type === "Create" ? createItem(data) : updateItem(data);
+    let filteredData = Object.fromEntries(
+      Object.entries(data).filter(([a, v]) => v !== "")
+    );
+    type === "Create" ? createItem(filteredData) : updateItem(filteredData);
   };
+
+  Modal.setAppElement("#root");
 
   return (
     <Modal
       isOpen={isOpen}
+      contentLabel="Example Modal"
       onRequestClose={closeModal}
+      className="Modal"
+      overlayClassName="Overlay"
       onAfterOpen={() => {
+        setResponseMessage("");
         getCategories();
+        reset();
         reset({
           price: elementToUpdate ? elementToUpdate.price : "",
           stock: elementToUpdate ? elementToUpdate.stock : "",
@@ -118,12 +122,9 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
           categoryId: elementToUpdate ? elementToUpdate.categoryId : "",
         });
       }}
-      style={customStyles}
-      contentLabel="Example Modal"
-      ariaHideApp={false}
     >
       {type === "delete" ? (
-        <>
+        <div className="delete">
           <p> Are you sure you want to delete this item?</p>
           <button
             type="submit"
@@ -141,7 +142,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
           >
             Cancel
           </button>
-        </>
+        </div>
       ) : (
         <>
           {element === "user" && (
@@ -154,7 +155,9 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   } mb-3`}
                 >
                   <input
-                    {...register("firstname", { required: false })}
+                    {...register("firstname", {
+                      required: elementToUpdate ? false : true,
+                    })}
                     type="text"
                     className="form-control"
                     id="firstName"
@@ -170,7 +173,9 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   } mb-3`}
                 >
                   <input
-                    {...register("lastname", { required: false })}
+                    {...register("lastname", {
+                      required: elementToUpdate ? false : true,
+                    })}
                     type="text"
                     className="form-control"
                     id="lastName"
@@ -186,7 +191,9 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   } mb-3`}
                 >
                   <input
-                    {...register("email", { required: false })}
+                    {...register("email", {
+                      required: elementToUpdate ? false : true,
+                    })}
                     type="email"
                     className="form-control"
                     id="email"
@@ -198,7 +205,9 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                 </div>
                 <div className="form-floating">
                   <input
-                    {...register("password", { required: false })}
+                    {...register("password", {
+                      required: elementToUpdate ? false : true,
+                    })}
                     type="password"
                     className="form-control"
                     id="password"
@@ -207,9 +216,12 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   <label htmlFor="password">Password</label>
                 </div>
 
-                <div className="pt-2 d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-between align-items-center flex-wrap">
                   <div className="d-inline-block">
-                    <button type="submit" className={"btn btn-main me-2"}>
+                    <button
+                      type="submit"
+                      className={"btn btn-long btn-main me-2"}
+                    >
                       {type}
                     </button>
                     <button
@@ -230,20 +242,14 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                 <h3>{type} product</h3>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div
-                  className={`${
-                    elementToUpdate ? "customFloat" : "form-floating"
-                  } mb-3`}
-                >
-                  <input
-                    {...register("images")}
-                    type="text"
-                    className="form-control"
-                    id="productName"
-                    disabled
-                  />
-                  <label htmlFor="productName">Image</label>
-                </div>
+                <label htmlFor="firstName">Images</label>
+                <input
+                  type="file"
+                  {...register("images")}
+                  className="form-control"
+                  id="firstName"
+                  multiple={true}
+                />
                 <div
                   className={`${
                     elementToUpdate ? "customFloat" : "form-floating"
@@ -363,9 +369,12 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   </div>
                 </div>
 
-                <div className="pt-2 d-flex justify-content-between align-items-center">
+                <div className=" d-flex justify-content-center align-items-center flex-wrap">
                   <div className="d-inline-block">
-                    <button type="submit" className={"btn btn-main me-2"}>
+                    <button
+                      type="submit"
+                      className={"btn btn-long btn-main me-2"}
+                    >
                       {type}
                     </button>
                     <button
@@ -403,7 +412,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                   <label htmlFor="categoryName">Name</label>
                 </div>
 
-                <div className="pt-2 d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-center align-items-center flex-wrap">
                   <div className="d-inline-block">
                     <button
                       type="submit"
@@ -417,6 +426,7 @@ function ModalCRUD({ type, element, elementToUpdate, isOpen, closeModal }) {
                     >
                       Cancel
                     </button>
+                    <p className="text-center m-0">{responseMessage}</p>
                   </div>
                 </div>
               </form>

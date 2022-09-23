@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import "./Login.css";
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

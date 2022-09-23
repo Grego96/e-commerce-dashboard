@@ -1,11 +1,32 @@
 import React from "react";
 import "./leftNav.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { deleteToken } from "../../redux/tokenActions";
+import { deleteUser } from "../../redux/userActions";
 
 function LeftNav() {
+  const dispatch = useDispatch();
+
+  async function resetDatabase() {
+    await axios({
+      method: "post",
+      baseURL: `${process.env.REACT_APP_API_BASE}/reset`,
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+      },
+    });
+  }
+
+  function logOut() {
+    dispatch(deleteUser());
+    dispatch(deleteToken());
+  }
+
   return (
-    <div className="leftNav ">
-      <h1 className="navHeader">RADPOWERBIKES</h1>
+    <div className="leftNav">
       <div className="listElements navItems">
         <div className="section">
           <h2>Overview</h2>
@@ -89,6 +110,14 @@ function LeftNav() {
             </li>
           </Link>
         </ul>
+      </div>
+      <div className="buttons">
+        <button className="btn-reset" onClick={() => resetDatabase()}>
+          Reset database
+        </button>
+        <button className="btn-main" onClick={() => logOut()}>
+          Logout
+        </button>
       </div>
     </div>
   );

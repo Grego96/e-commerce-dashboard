@@ -1,17 +1,11 @@
 .leftNav {
-  padding-top: 1.5em;
-  /* background-color: black; */
   color: white;
-}
-
-.navItems {
+  padding: 1.5em;
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.navHeader {
-  font-size: 2.3rem !important;
 }
 
 a {
@@ -24,12 +18,23 @@ a {
   width: 1em;
 }
 
+.leftNav h1 {
+  font-weight: 400;
+}
+
+.leftNav h2 {
+  font-weight: 400;
+  font-size: 1.5em;
+}
+
+.leftNav ul li {
+  font-weight: 300;
+  font-size: 1.1em;
+}
+
 .navTitle {
   text-align: center;
   margin-bottom: 60px;
-}
-.navTitle h2 {
-  font-size: 1.5rem;
 }
 
 .listElements ul {
@@ -40,7 +45,6 @@ a {
 .listElements ul li {
   list-style: none;
   padding: 10px 15px;
-  font-size: 1.3rem;
   color: white;
   text-decoration: none;
   transition: 0.3s;
@@ -65,10 +69,38 @@ a {
 
 .section {
   border-bottom: 1px solid rgb(255, 255, 255);
-  /* margin-top: 1em; */
   font-weight: 500;
 }
 
 .second-section {
   margin-top: 2em;
+}
+/* 
+.leftNav .buttons {
+  margin-top: 70vh;
+} */
+
+.leftNav button {
+  width: 100%;
+  border-radius: 180px;
+}
+
+.leftNav button:hover {
+  color: white;
+}
+
+.leftNav .btn-reset {
+  background-color: black;
+  color: rgb(116, 116, 116);
+}
+
+@media (max-width: 768px) {
+  .leftNav .buttons {
+    margin-top: 0px;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .leftNav button {
+    width: 50%;
+  }
 }

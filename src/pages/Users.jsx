@@ -6,6 +6,8 @@ import Modal from "./components/ModalCRUD";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 function Users() {
+  const token = useSelector((state) => state.token.value);
+
   const [users, setUsers] = useState(null);
   const isLogged = useSelector((state) => state.token.value) !== "";
 
@@ -26,8 +28,7 @@ function Users() {
       method: "get",
       baseURL: `${process.env.REACT_APP_API_BASE}/users`,
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
+        Authorization: "Bearer " + token,
       },
     });
     if (response) {
@@ -37,6 +38,7 @@ function Users() {
 
   useEffect(() => {
     getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users]);
 
   return (
@@ -48,13 +50,13 @@ function Users() {
           <>
             <div className="table-responsive">
               <div className="d-flex justify-content-between align-items-center">
-                <h1>Users</h1>
-                <button
-                  className="btn ps-4 pe-4"
+                <h2>Users</h2>
+                <span
+                  className="me-2 create"
                   onClick={() => openModal("Create")}
                 >
                   +
-                </button>
+                </span>
               </div>
               <table className="table table-hover align-middle">
                 <thead>
@@ -73,7 +75,7 @@ function Users() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users && (
+                  {users ? (
                     <>
                       {users.map((u) => (
                         <tr key={u.id}>
@@ -122,7 +124,9 @@ function Users() {
                           ) : (
                             <>
                               <td>
-                                <div className="buyer text-center">Buyer</div>
+                                <div className="buyer text-center">
+                                  Customer
+                                </div>
                               </td>
                               <td className="d-none d-lg-table-cell">
                                 {u.address}
@@ -136,6 +140,12 @@ function Users() {
                         </tr>
                       ))}
                     </>
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="text-center">
+                        Loading...
+                      </td>
+                    </tr>
                   )}
                 </tbody>
               </table>
