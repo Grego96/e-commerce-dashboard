@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { deleteToken } from "../../redux/tokenActions";
 import { deleteUser } from "../../redux/userActions";
+import { resetDb } from "../../redux/dbAction";
 
 function LeftNav() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function LeftNav() {
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjYzMDkwMTEzfQ.ij4gMCpahRR096dFgIq4jvSlhQ4i0h3aL3ND9T8vHRw",
       },
     });
+    dispatch(resetDb())
   }
 
   function logOut() {
@@ -112,10 +114,10 @@ function LeftNav() {
         </ul>
       </div>
       <div className="buttons">
-        <button className="btn-reset" onClick={() => resetDatabase()}>
+        <button className="btn-reset my-2 p-2" onClick={() => resetDatabase()}>
           Reset database
         </button>
-        <button className="btn-main" onClick={() => logOut()}>
+        <button className="btn-main my-2 p-2" onClick={() => logOut()}>
           Logout
         </button>
       </div>
