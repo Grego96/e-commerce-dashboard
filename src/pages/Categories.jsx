@@ -35,6 +35,7 @@ function Categories() {
       setCategories(response.data);
     }
   }
+
   useEffect(() => {
     getCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps

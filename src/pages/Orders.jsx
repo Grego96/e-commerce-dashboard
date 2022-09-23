@@ -5,9 +5,8 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 
 function Orders() {
-  const token = useSelector((state) => state.token.value);
-
   const isLogged = useSelector((state) => state.token.value) !== "";
+  const token = useSelector((state) => state.token.value);
   const [orders, setOrders] = useState(null);
 
   useEffect(() => {

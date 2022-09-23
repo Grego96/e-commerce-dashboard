@@ -43,3 +43,11 @@ svg {
 .create:hover {
   color: black;
 }
+
+.bg-main {
+  background-color: var(--main-bg-color);
+}
+
+.bg-sec {
+  background-color: var(--seg-bg-color);
+}
