@@ -74,15 +74,14 @@ function ModalCRUD({
           Authorization: "Bearer " + token,
         },
       });
-      closeModal();
       getElements();
+      closeModal();
     } catch (error) {
       setResponseMessage(error.response.data.message);
     }
   }
 
   async function updateItem(data) {
-    console.log(data);
     const formData = new FormData();
     if (element === "product") {
       if (data.images.length > 0) {
@@ -100,7 +99,6 @@ function ModalCRUD({
       }
     }
     try {
-      // console.log(formData);
       await axios({
         method: "patch",
         baseURL: `${process.env.REACT_APP_API_BASE}/${endpoint}/${elementToUpdate.id}`,
@@ -109,8 +107,8 @@ function ModalCRUD({
           Authorization: "Bearer " + token,
         },
       });
-      closeModal();
       getElements();
+      closeModal();
     } catch (error) {
       setResponseMessage(error.response.data.message);
     }
@@ -124,8 +122,8 @@ function ModalCRUD({
         Authorization: "Bearer " + token,
       },
     });
-    closeModal();
     getElements();
+    closeModal();
   }
 
   const { register, handleSubmit, reset } = useForm();
