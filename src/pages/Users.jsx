@@ -71,7 +71,7 @@ function Users() {
                     <th scope="col" className="d-none d-lg-table-cell">
                       Phone Number
                     </th>
-                    <th scope="col">Actions</th>
+                    {/* <th scope="col">Actions</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -90,7 +90,7 @@ function Users() {
                               <td className="d-none d-lg-table-cell emptyRows" />
                               <td className="d-none d-lg-table-cell emptyRows" />
 
-                              <td width={"1%"}>
+                              {/* <td width={"1%"}>
                                 <div className="d-flex justify-content-around action-buttons">
                                   <button
                                     className="btn"
@@ -119,7 +119,7 @@ function Users() {
                                     </svg>
                                   </button>
                                 </div>
-                              </td>
+                              </td> */}
                             </>
                           ) : (
                             <>
