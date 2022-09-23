@@ -20,6 +20,7 @@ function ModalCRUD({
 
   useEffect(() => {
     getElements();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbState]);
 
   const [categories, setCategories] = useState(null);
@@ -70,13 +71,11 @@ function ModalCRUD({
           Authorization: "Bearer " + token,
         },
       });
-      // setResponseMessage(response.data.message);
-      console.log(response);
+      setResponseMessage(response.data.message);
       closeModal();
       getElements();
     } catch (error) {
-      console.log(error);
-      // setResponseMessage(error.response.data.message);
+      setResponseMessage(error.response.data.message);
     }
   }
 
@@ -262,7 +261,7 @@ function ModalCRUD({
                 <input
                   type="file"
                   {...register("images")}
-                  className="form-control"
+                  className="form-control mb-3"
                   id="firstName"
                   multiple={true}
                 />

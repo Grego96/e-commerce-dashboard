@@ -155,10 +155,10 @@ function Dashboard() {
               quantity={1024}
               svg={totalRevenueSVG}
             ></DashboardCard>
-            <div className="col-12 col-lg-6 ">
+            <div className="col-12 col-xl-6 ">
               <Bar options={options} data={data} />
             </div>
-            <div className="col-12 col-lg-6 ">
+            <div className="col-12 col-xl-6 ">
               <Line options={optionsArea} data={dataArea} />
             </div>
             <div className="col-12">

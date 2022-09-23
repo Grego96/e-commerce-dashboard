@@ -45,7 +45,11 @@ svg {
 }
 
 .bg-main {
-  background-color: var(--main-bg-color);
+  background: linear-gradient(
+    280deg,
+    rgba(255, 195, 116, 1) 0%,
+    rgba(255, 180, 81, 1) 100%
+  );
 }
 
 .bg-sec {
